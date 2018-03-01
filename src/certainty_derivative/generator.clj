@@ -95,3 +95,31 @@
 
 (defn sample-pipe-delinated-row []
   (string/join " | " (sample-data)))
+
+(defn generate-sample-data [n]
+  (take n (repeatedly sample-data)))
+
+(defn generate-sample-rows [n option]
+  (let [delineator (cond (= option :comma) ", "
+                         (= option :space) " "
+                         (= option :pipe) " | ")]
+    (map #(string/join delineator %) (generate-sample n))))
+
+(defn clean-test-data [filename]
+  (-> filename
+      (io/resource)
+      (io/as-file)
+      (io/delete-file)))
+
+(defn generate-test-data [n]
+  (doseq [file ["001.txt" "002.txt" "003.txt"]]
+    (clean-test-data file))
+  (doseq [row (generate-sample-rows n :comma)]
+    (spit "./resources/001.txt" (str row "\n") :append true))
+  (doseq [row (generate-sample-rows n :space)]
+    (spit "./resources/002.txt" (str row "\n") :append true))
+  (doseq [row (generate-sample-rows n :pipe)]
+    (spit "./resources/003.txt" (str row "\n") :append true)))
+
+(generate-test-data 100)
+
