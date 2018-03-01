@@ -48,4 +48,4 @@
     (persistent! acc)))
 
 (defn read-files [& filenames]
-  (mapcat parse-file filenames))
+  (mapcat read-file filenames))
