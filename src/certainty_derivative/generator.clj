@@ -103,7 +103,7 @@
   (let [delineator (cond (= option :comma) ", "
                          (= option :space) " "
                          (= option :pipe) " | ")]
-    (map #(string/join delineator %) (generate-sample n))))
+    (map #(string/join delineator %) (generate-sample-data n))))
 
 (defn clean-test-data [filename]
   (-> filename
@@ -121,5 +121,5 @@
   (doseq [row (generate-sample-rows n :pipe)]
     (spit "./resources/003.txt" (str row "\n") :append true)))
 
-(generate-test-data 100)
+#_(generate-test-data 100)
 
