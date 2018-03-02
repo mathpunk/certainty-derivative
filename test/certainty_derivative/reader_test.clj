@@ -8,16 +8,16 @@
 
 (deftest test-file-reading
   (do
-    (generate-test-data 100)
-    (is (= 100 (count (read-file "./resources/001.txt"))))
-    (is (= 300 (count (read-files "./resources/001.txt"
-                                  "./resources/002.txt"
-                                  "./resources/003.txt"))))))
+    (generate-test-data 10)
+    (is (= 10 (count (read-file "./resources/001.txt"))))
+    (is (= 30 (count (read-files "./resources/001.txt"
+                                 "./resources/002.txt"
+                                 "./resources/003.txt"))))))
 
-#_(deftest test-file-parsing
-    (do
-      (generate-test-data 100)
-      (let [data (read-files "./resources/001.txt"
-                             "./resources/002.txt"
-                             "./resources/003.txt")]
-        (is (every? #(s/valid? :certainty-derivative.input/row %) data)))))
+(deftest test-file-parsing
+  (do
+    (generate-test-data 20)
+    (let [data (read-files "./resources/001.txt"
+                           "./resources/002.txt"
+                           "./resources/003.txt")]
+      (is (every? #(s/valid? :certainty-derivative.input/row %) data)))))
