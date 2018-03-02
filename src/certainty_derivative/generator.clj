@@ -39,10 +39,12 @@
 ;;
 ;; - assume that the data comes from a pulldown menu with some binary and non-binary options, and
 ;; - assume most people choose from the binary options, and
+;; - some people might decline to adjust the menu, and
 ;; - assume there is no reason to to record transgender status
 
 (def non-binary-gender-options ["Prefer not to say"
-                                "Non-binary / third gender"])
+                                "Non-binary / third gender"
+                                ""])
 
 (defn gender []
   (let [choice (rand-int 1000)]
