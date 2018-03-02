@@ -1,7 +1,8 @@
 (ns certainty-derivative.reader
   (:require [clojure.java.io :as io]
             [clojure.string :as string]
-            [clojure.spec.alpha :as s]))
+            [clojure.spec.alpha :as s]
+            [java-time :as time]))
 
 (defn detect-delimiter
   "Using the assumption that delimiter characters do not appear in the data
@@ -35,6 +36,18 @@
         column-names [:last-name :first-name :gender
                       :favorite-color :date-of-birth]]
     (zipmap column-names fields)))
+
+(def record
+  {:last-name "Alexander", :first-name "Mya", :gender "Decline to state",
+   :favorite-color "green", :date-of-birth "1979-3-23"})
+
+(defn- string->date [s]
+  (->> (string/split s #"-")
+       (map #(Integer. %))
+       (apply time/local-date)))
+
+(defn transform-row [input-row]
+  (update-in [:date-of-birth] string->date))
 
 (s/def :certainty-derivative.input/row
   (s/keys :req-un [::last-name ::first-name ::gender

@@ -33,6 +33,12 @@
                         first
                         :last-name)))))
 
-
-
-
+(deftest test-dob-sort
+  (is (= "Margaret" (-> sample
+                        sort-by-date-of-birth-ascending
+                        first
+                        :first-name)))
+  (is (= "Paul" (-> sample
+                    sort-by-date-of-birth-ascending
+                    last
+                    :first-name))))
