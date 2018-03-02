@@ -20,4 +20,4 @@
     (let [data (read-files "./resources/001.txt"
                            "./resources/002.txt"
                            "./resources/003.txt")]
-      (is (every? #(s/valid? :certainty-derivative.input/row %) data)))))
+      (is (every? #(s/valid? :certainty-derivative.record/row %) data)))))

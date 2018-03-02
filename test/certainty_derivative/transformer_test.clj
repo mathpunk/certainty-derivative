@@ -34,6 +34,8 @@
   (is (= :comma (detect-delimiter example-comma-row))))
 
 (deftest test-row-parsing
-  (is (s/valid? :certainty-derivative.input/row (parse-row example-space-row)))
-  (is (s/valid? :certainty-derivative.input/row (parse-row example-comma-row)))
-  (is (s/valid? :certainty-derivative.input/row (parse-row example-pipe-row))))
+  (is (s/valid? :certainty-derivative.record/row (parse-row example-space-row)))
+  (is (s/valid? :certainty-derivative.record/row (parse-row example-comma-row)))
+  (is (s/valid? :certainty-derivative.record/row (parse-row example-pipe-row))))
+
+(s/explain :certainty-derivative.record/row (parse-row example-space-row))

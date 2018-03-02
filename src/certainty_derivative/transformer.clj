@@ -1,5 +1,7 @@
 (ns certainty-derivative.transformer
   (:require [java-time :as time]
+            [certainty-derivative.record]
+            [clojure.spec.alpha :as s]
             [clojure.string :as string]))
 
 (defn detect-delimiter
@@ -31,7 +33,14 @@
 
 (defn parse-row [input-row]
   (let [fields (tokenize-row input-row)
-        column-names [:last-name :first-name :gender
-                      :favorite-color :date-of-birth]
+        column-names [:certainty-derivative.record/last-name
+                      :certainty-derivative.record/first-name
+                      :certainty-derivative.record/gender
+                      :certainty-derivative.record/favorite-color
+                      :certainty-derivative.record/date-of-birth]
         string-record (zipmap column-names fields)]
-    (update-in string-record [:date-of-birth] string->date)))
+    (update-in string-record
+               [:certainty-derivative.record/date-of-birth] string->date)))
+
+(s/fdef parse-row
+        :ret :certainty-derivative.record/row)
