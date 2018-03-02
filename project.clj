@@ -6,4 +6,7 @@
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/data.json "0.2.6"]
                  [clojure.java-time "0.3.1"]
-                 ])
+                 ]
+  :main certainty-derivative.core
+  :aliases {"view" ["run" "-m" "certainty-derivative.core/view"]}
+  )
