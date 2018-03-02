@@ -1,4 +1,4 @@
-(ns certainty-derivative.view)
+(ns certainty-derivative.viewer)
 
 (defn sort-by-last-name-descending [records]
   (reverse (sort-by :last-name records)))
