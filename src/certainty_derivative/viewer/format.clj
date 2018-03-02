@@ -1,21 +1,7 @@
-(ns certainty-derivative.viewer
-  (:require [java-time :as time]))
+(ns certainty-derivative.viewer.format
+  (:require certainty-derivative.record
+            [java-time :as time]))
 
-;; Sorting
-;; ===============
-(defn sort-by-last-name-descending [records]
-  (reverse (sort-by :certainty-derivative.record/last-name records)))
-
-(defn sort-by-gender-and-last-name-ascending [records]
-  (let [score (fn [gender] (if (= gender "f") 1 0))]
-    (sort-by (juxt (comp - score :certainty-derivative.record/gender) :certainty-derivative.record/last-name) records)))
-
-(defn sort-by-date-of-birth-ascending [records]
-  (sort-by :certainty-derivative.record/date-of-birth records))
-
-
-;; String formatting
-;; ======================
 (defn friendly-name [record]
   (str (record :certainty-derivative.record/first-name)
        " "

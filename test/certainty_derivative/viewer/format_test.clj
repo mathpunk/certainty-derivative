@@ -1,6 +1,6 @@
-(ns certainty-derivative.viewer-test
-  (:require [certainty-derivative.transformer :refer [string->date]]
-            [certainty-derivative.viewer :refer :all]
+(ns certainty-derivative.viewer.format-test
+  (:require [certainty-derivative.viewer.format :refer :all]
+            [certainty-derivative.transformer :refer [string->date]]
             [clojure.string :as string]
             [clojure.test :refer [deftest is]]))
 
@@ -34,27 +34,6 @@
                    (update-in record
                               [:certainty-derivative.record/date-of-birth]
                               string->date)) sample-input))
-
-(deftest test-last-name-sort
-  (let [sorted (sort-by-last-name-descending sample)]
-    (is (= "Wright" ((first sorted) :certainty-derivative.record/last-name)))
-    (is (= "Alberts" ((last sorted) :certainty-derivative.record/last-name)))
-    ))
-
-(defn is-female? [record]
-  (= "f" (record :certainty-derivative.record/gender)))
-
-(deftest test-gender-sort
-  (let [expected '("Cunningham" "Wright" "Alberts" "Alexander" "Henry")]
-    (is (= expected (->> sample
-                         sort-by-gender-and-last-name-ascending
-                         (map :certainty-derivative.record/last-name))))))
-
-(deftest test-dob-sort
-  (let [expected '("Alberts" "Henry" "Wright" "Alexander" "Cunningham")]
-    (is (= expected (->> sample
-                         sort-by-date-of-birth-ascending
-                         (map :certainty-derivative.record/last-name))))))
 
 (defn includes-each? [s coll]
   (every? #(string/includes? s %) coll))
