@@ -1,5 +1,5 @@
-(ns certainty-derivative.reader
-  (:require [certainty-derivative.transformer :as xform]
+(ns certainty-derivative.loader.read
+  (:require [certainty-derivative.loader.transform :as xform]
             [clojure.java.io :as io]))
 
 (defn read-file [filename]

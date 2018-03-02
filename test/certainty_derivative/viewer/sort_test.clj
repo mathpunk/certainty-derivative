@@ -1,5 +1,5 @@
 (ns certainty-derivative.viewer.sort-test
-  (:require [certainty-derivative.transformer :refer [string->date]]
+  (:require [certainty-derivative.loader.transform :refer [string->date]]
             [certainty-derivative.viewer.sort :refer :all]
             [clojure.test :refer [deftest is]]))
 

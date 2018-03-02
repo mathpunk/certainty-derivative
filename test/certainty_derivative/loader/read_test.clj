@@ -1,6 +1,6 @@
-(ns certainty-derivative.reader-test
+(ns certainty-derivative.loader.read-test
   (:require [certainty-derivative.generator :refer [generate-test-data]]
-            [certainty-derivative.reader :refer :all]
+            [certainty-derivative.loader.read :refer :all]
             [clojure.spec.alpha :as s]
             [clojure.test :refer [deftest is]]))
 

@@ -1,5 +1,5 @@
-(ns certainty-derivative.transformer-test
-  (:require [certainty-derivative.transformer :refer :all]
+(ns certainty-derivative.loader.transform-test
+  (:require [certainty-derivative.loader.transform :refer :all]
             [clojure.spec.alpha :as s]
             [clojure.string :as string]
             [clojure.test :refer [deftest is]]))
