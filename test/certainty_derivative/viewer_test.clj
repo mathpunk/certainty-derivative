@@ -1,44 +1,73 @@
-(ns certainty-derivative.view-test
-  (:require [certainty-derivative.view :refer :all]
-            [clojure.test :refer [deftest testing is]]))
+(ns certainty-derivative.viewer-test
+  (:require [certainty-derivative.viewer :refer :all]
+            [certainty-derivative.transformer :refer [string->date parse-row]]
+            [clojure.test :refer [deftest testing is]]
+            [clojure.string :as string]))
 
-(def sample [{:last-name "Alexander", :first-name "Mya", :gender "Decline to state",
-              :favorite-color "green", :date-of-birth "1979-3-23"}
-             {:last-name "Henry", :first-name "Giovanni", :gender "m",
-              :favorite-color "orange", :date-of-birth "1941-7-16"}
-             {:last-name "Wright", :first-name "Camila", :gender "f",
-              :favorite-color "orange", :date-of-birth "1970-3-28"}
-             {:last-name "Cunningham", :first-name "Paul", :gender "f",
-              :favorite-color "green", :date-of-birth "1995-7-19"}
-             {:last-name "Alberts", :first-name "Margaret", :gender "m",
-              :favorite-color "purple", :date-of-birth "1902-9-2"}])
+(def sample-input [{:certainty-derivative.record/last-name "Alexander"
+                    :certainty-derivative.record/first-name "Mya"
+                    :certainty-derivative.record/gender "Decline to state"
+                    :certainty-derivative.record/favorite-color "green"
+                    :certainty-derivative.record/date-of-birth "1979-3-23"},
+                   {:certainty-derivative.record/last-name "Henry",
+                    :certainty-derivative.record/first-name "Giovanni",
+                    :certainty-derivative.record/gender "m",
+                    :certainty-derivative.record/favorite-color "orange",
+                    :certainty-derivative.record/date-of-birth "1941-7-16"},
+                   {:certainty-derivative.record/last-name "Wright",
+                    :certainty-derivative.record/first-name "Camila",
+                    :certainty-derivative.record/gender "f",
+                    :certainty-derivative.record/favorite-color "orange",
+                    :certainty-derivative.record/date-of-birth "1970-3-28"},
+                   {:certainty-derivative.record/last-name "Cunningham",
+                    :certainty-derivative.record/first-name "Paul",
+                    :certainty-derivative.record/gender "f",
+                    :certainty-derivative.record/favorite-color "green",
+                    :certainty-derivative.record/date-of-birth "1995-7-19"},
+                   {:certainty-derivative.record/last-name "Alberts",
+                    :certainty-derivative.record/first-name "Margaret",
+                    :certainty-derivative.record/gender "m",
+                    :certainty-derivative.record/favorite-color "purple",
+                    :certainty-derivative.record/date-of-birth "1902-9-2"}])
+
+(def sample (map (fn [record]
+                   (update-in record
+                              [:certainty-derivative.record/date-of-birth]
+                              string->date)) sample-input))
 
 (deftest test-last-name-sort
   (let [sorted (sort-by-last-name-descending sample)]
-    (is (= "Alberts" ((last sorted) :last-name)))
-    (is (= "Wright" ((first sorted) :last-name)))))
+    (is (= "Wright" ((first sorted) :certainty-derivative.record/last-name)))
+    (is (= "Alberts" ((last sorted) :certainty-derivative.record/last-name)))
+    ))
+
+(defn is-female? [record]
+  (= "f" (record :certainty-derivative.record/gender)))
 
 (deftest test-gender-sort
-  (let [records [{:gender "m" :last-name "Adams"}
-                 {:gender "f" :last-name "Zorro"}
-                 {:gender "f" :last-name "Marcos"}]
-        more-records [{:gender "Decline to state", :last-name "Adams"}
-                      {:gender "f", :last-name "Wright"}]]
-    (is (= "Marcos" (-> records
-                        sort-by-gender-and-last-name-ascending
-                        first
-                        :last-name)))
-    (is (= "Wright" (-> more-records
-                        sort-by-gender-and-last-name-ascending
-                        first
-                        :last-name)))))
+  (let [expected '("Cunningham" "Wright" "Alberts" "Alexander" "Henry")]
+    (is (= expected (->> sample
+                         sort-by-gender-and-last-name-ascending
+                         (map :certainty-derivative.record/last-name))))))
 
 (deftest test-dob-sort
-  (is (= "Margaret" (-> sample
-                        sort-by-date-of-birth-ascending
-                        first
-                        :first-name)))
-  (is (= "Paul" (-> sample
-                    sort-by-date-of-birth-ascending
-                    last
-                    :first-name))))
+  (let [expected '("Alberts" "Henry" "Wright" "Alexander" "Cunningham")]
+    (is (= expected (->> sample
+                         sort-by-date-of-birth-ascending
+                         (map :certainty-derivative.record/last-name))))))
+
+(defn includes-each? [s coll]
+  (every? #(string/includes? s %) coll))
+
+(deftest test-friendly-records
+  (let [messages (map friendly-format sample)]
+    (is (includes-each? (nth messages 0)
+                        ["Mya" "Alexander" "Their" "green" "03/23/1979"]))
+    (is (includes-each? (nth messages 1)
+                        ["Giovanni" "Henry" "His" "orange" "07/16/1941"]))
+    (is (includes-each? (nth messages 2)
+                        ["Camila" "Wright" "Her" "orange" "03/28/1970"]))
+    (is (includes-each? (nth messages 3)
+                        ["Paul" "Cunningham" "Her" "green" "07/19/1995"]))
+    (is (includes-each? (nth messages 4)
+                        ["Margaret" "Alberts" "His" "purple" "09/02/1902"]))))
