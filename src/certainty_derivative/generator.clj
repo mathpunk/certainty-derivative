@@ -1,6 +1,6 @@
 (ns certainty-derivative.generator
-  (:require [clojure.java.io :as io]
-            [clojure.data.json :as json]
+  (:require [clojure.data.json :as json]
+            [clojure.java.io :as io]
             [clojure.string :as string]))
 
 ;; Names

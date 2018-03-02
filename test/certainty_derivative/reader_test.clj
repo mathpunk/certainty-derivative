@@ -1,10 +1,8 @@
 (ns certainty-derivative.reader-test
-  (:require  [certainty-derivative.reader :refer :all]
-             [certainty-derivative.generator :refer [generate-test-data]]
-             [clojure.spec.alpha :as s]
-             [clojure.string :as string]
-             [clojure.test :refer [deftest testing is]]
-             [clojure.string :as string]))
+  (:require [certainty-derivative.generator :refer [generate-test-data]]
+            [certainty-derivative.reader :refer :all]
+            [clojure.spec.alpha :as s]
+            [clojure.test :refer [deftest is]]))
 
 (deftest test-file-reading
   (do

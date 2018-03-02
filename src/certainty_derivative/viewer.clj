@@ -47,18 +47,3 @@
          " favorite color is "
          (record :certainty-derivative.record/favorite-color)
          ".")))
-
-;; (def record
-;;   (update-in 
-;;    {:last-name "Alexander", :first-name "Mya", :gender "Decline to state", :favorite-color "green", :date-of-birth "1979-03-23"}
-;;    [:date-of-birth]
-;;    string->date))
-
-
-;; (def record-input {:last-name "Alexander", :first-name "Mya", :gender "Decline to state", :favorite-color "green", :date-of-birth "1979-03-23"})
-
-;; (def record (update-in record-input [:date-of-birth] string->date))
-
-;; record
-
-;; (friendly-format record)

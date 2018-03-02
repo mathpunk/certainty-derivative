@@ -1,9 +1,6 @@
 (ns certainty-derivative.reader
-  (:require [clojure.java.io :as io]
-            [clojure.string :as string]
-            [clojure.spec.alpha :as s]
-            [certainty-derivative.transformer :as xform]
-            [java-time :as time]))
+  (:require [certainty-derivative.transformer :as xform]
+            [clojure.java.io :as io]))
 
 (defn read-file [filename]
   (let [acc (transient [])]

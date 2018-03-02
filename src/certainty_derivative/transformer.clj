@@ -1,8 +1,8 @@
 (ns certainty-derivative.transformer
-  (:require [java-time :as time]
-            [certainty-derivative.record]
+  (:require certainty-derivative.record
             [clojure.spec.alpha :as s]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [java-time :as time]))
 
 (defn detect-delimiter
   "Using the assumption that delimiter characters do not appear in the data

@@ -1,8 +1,8 @@
 (ns certainty-derivative.viewer-test
-  (:require [certainty-derivative.viewer :refer :all]
-            [certainty-derivative.transformer :refer [string->date parse-row]]
-            [clojure.test :refer [deftest testing is]]
-            [clojure.string :as string]))
+  (:require [certainty-derivative.transformer :refer [string->date]]
+            [certainty-derivative.viewer :refer :all]
+            [clojure.string :as string]
+            [clojure.test :refer [deftest is]]))
 
 (def sample-input [{:certainty-derivative.record/last-name "Alexander"
                     :certainty-derivative.record/first-name "Mya"

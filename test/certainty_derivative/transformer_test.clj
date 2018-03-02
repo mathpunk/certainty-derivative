@@ -1,8 +1,8 @@
 (ns certainty-derivative.transformer-test
   (:require [certainty-derivative.transformer :refer :all]
-            [clojure.string :as string]
             [clojure.spec.alpha :as s]
-            [clojure.test :refer [deftest testing is]]))
+            [clojure.string :as string]
+            [clojure.test :refer [deftest is]]))
 
 (def example-first-name "Thomas")
 (def example-last-name "Henderson")
@@ -37,5 +37,3 @@
   (is (s/valid? :certainty-derivative.record/row (parse-row example-space-row)))
   (is (s/valid? :certainty-derivative.record/row (parse-row example-comma-row)))
   (is (s/valid? :certainty-derivative.record/row (parse-row example-pipe-row))))
-
-(s/explain :certainty-derivative.record/row (parse-row example-space-row))
