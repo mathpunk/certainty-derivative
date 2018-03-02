@@ -37,10 +37,10 @@
 ;;
 ;; There is a case to be made for not collecting this information, or even sticking with a gender binary question (on the theory that there are few enough gender-nonconforming individuals that to identify as such comes with risks). The assumptions I settled on are:
 ;;
-;; - assume that the data comes from a pulldown menu with some binary and non-binary options, and
-;; - assume most people choose from the binary options, and
+;; - the data comes from a pulldown menu with some binary and non-binary options, and
+;; - most people choose from the binary options, and
 ;; - some people might decline to adjust the menu, and
-;; - assume there is no reason to to record transgender status
+;; - there is no reason to to record transgender status
 
 (def non-binary-gender-options ["Prefer not to say"
                                 "Non-binary / third gender"
@@ -89,15 +89,6 @@
    (favorite-color)
    (date-of-birth)])
 
-(defn sample-comma-delinated-row []
-  (string/join ", " (sample-data)))
-
-(defn sample-space-delinated-row []
-  (string/join " " (sample-data)))
-
-(defn sample-pipe-delinated-row []
-  (string/join " | " (sample-data)))
-
 (defn generate-sample-data [n]
   (take n (repeatedly sample-data)))
 
@@ -122,6 +113,3 @@
     (spit "./resources/002.txt" (str row "\n") :append true))
   (doseq [row (generate-sample-rows n :pipe)]
     (spit "./resources/003.txt" (str row "\n") :append true)))
-
-#_(generate-test-data 100)
-
