@@ -16,6 +16,8 @@
     :default "lname"
     #_:validate #_[#(s/valid? :certainty-derivative.options/ordering %)
                    "Must be 'women', 'dob', or 'lname'"]]
+   ["-r" "--reverse TRUE/FALSE" "Reverse the sort order (default false)"
+    :default "false"]
    ["-h" "--help"]])
 
 (s/fdef flag-options
@@ -24,7 +26,7 @@
 (defn parse [args]
   (parse-opts args flag-options))
 
-#_(parse ["./resources/001.txt" "./resources/002.txt"])
+#_(parse ["-r" "true" "./resources/001.txt" "./resources/002.txt"])
 
 #_(parse ["-s" "women" "./resources/001.txt"])
 
