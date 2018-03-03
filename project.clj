@@ -9,6 +9,7 @@
                  [org.clojure/tools.cli "0.3.5"]
                  [ring/ring-core "1.6.3"]
                  [ring/ring-jetty-adapter "1.6.3"]
+                 [ring/ring-mock "0.3.2"]
                  ]
   :plugins [[lein-ring "0.12.3"]]
   :ring {:handler certainty-derivative.server/handler}
