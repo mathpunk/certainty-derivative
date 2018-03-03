@@ -14,9 +14,9 @@
 
 (defn dispatch-sort [options records]
   (let [strategy (get-in options [:options :sort])
-        direction (case (get-in options [:options :reverse])
-                    "true" reverse
-                    "false" identity)]
+        direction (if (get-in options [:options :reverse])
+                    reverse
+                    identity)]
     (case strategy
       "women" (direction (by-gender-and-last-name records))
       "lname" (direction (by-last-name records))

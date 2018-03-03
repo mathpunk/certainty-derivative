@@ -29,4 +29,9 @@
   (testing "with sort option (-s flag)"
     (is (= "women"
            (get-in (parse ["-s" "women" "./resources/001.txt" "./resources/002.txt"])
-                   [:options :sort])))))
+                   [:options :sort]))))
+  (testing "with reversal"
+    (is (get-in (parse ["-r" "./resources/001.txt"])
+                [:options :reverse]))
+    (is (not (get-in (parse ["./resources/001.txt"])
+                     [:options :reverse]))))) 
