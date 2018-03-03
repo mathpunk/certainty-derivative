@@ -5,7 +5,7 @@
             [clojure.test :refer [deftest testing is]]))
 
 (deftest hello-testing
-  (is (= (handler (mock/request :get "/"))
+  (is (= (app (mock/request :get "/"))
          {:status  200
           :headers {"Content-Type" "text/plain"}
           :body    "Hello world"})))

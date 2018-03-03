@@ -10,9 +10,10 @@
                  [ring/ring-core "1.6.3"]
                  [ring/ring-jetty-adapter "1.6.3"]
                  [ring/ring-mock "0.3.2"]
+                 [compojure "1.6.0"]
                  ]
   :plugins [[lein-ring "0.12.3"]]
-  :ring {:handler certainty-derivative.server/handler}
+  :ring {:handler certainty-derivative.server/app}
   :aliases {"view" ["run" "-m" "certainty-derivative.core/view"]
             "serve" ["ring" "server"]}
   )

@@ -1,9 +1,12 @@
-(ns certainty-derivative.server)
+(ns certainty-derivative.server
+  (:require [compojure.core :refer :all]
+            [ring.util.response :as res]
+            [compojure.route :as route]))
 
-(defn handler [req]
-  {:status 200
-   :headers {"Content-Type" "text/plain"}
-   :body "Hello world"})
+(defroutes app
+  (GET "/" [] (-> "Hello world"
+                  res/response
+                  (res/content-type "text/plain"))))
 
 ;; • POST /records - Post a single data line in any of the 3 formats supported by your existing code
 ;; • GET /records/gender - returns records sorted by gender
