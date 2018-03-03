@@ -25,10 +25,3 @@
 
 (defn parse [args]
   (parse-opts args flag-options))
-
-(parse ["-r" "true" "./resources/001.txt" "./resources/002.txt"])
-
-(parse ["-s" "women" "./resources/001.txt"])
-
-#_(parse ["-s" "dob" "./resources/001.txt" "./resources/002.txt"])
-

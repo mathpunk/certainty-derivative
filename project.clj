@@ -7,7 +7,11 @@
                  [org.clojure/data.json "0.2.6"]
                  [clojure.java-time "0.3.1"]
                  [org.clojure/tools.cli "0.3.5"]
+                 [ring/ring-core "1.6.3"]
+                 [ring/ring-jetty-adapter "1.6.3"]
                  ]
-  :main certainty-derivative.core
-  :aliases {"view" ["run" "-m" "certainty-derivative.core/view"]}
+  :plugins [[lein-ring "0.12.3"]]
+  :ring {:handler certainty-derivative.server/handler}
+  :aliases {"view" ["run" "-m" "certainty-derivative.core/view"]
+            "serve" ["ring" "server"]}
   )
