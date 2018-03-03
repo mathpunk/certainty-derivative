@@ -1,7 +1,7 @@
 (ns certainty-derivative.options
-  (:require [clojure.tools.cli :refer [parse-opts]]
+  (:require [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
-            [clojure.java.io :as io]))
+            [clojure.tools.cli :refer [parse-opts]]))
 
 (s/def ::sort #{"women" "lname" "dob"})
 

@@ -1,12 +1,8 @@
 (ns certainty-derivative.core
   (:require [certainty-derivative.loader.read :refer [read-files]]
             [certainty-derivative.options :as options]
-            [certainty-derivative.viewer.sort :as sort]
-            [clojure.tools.cli :refer [parse-opts]]
-            [certainty-derivative.viewer.format :as format]))
-
-(defn -main []
-  (println "hello, -main"))
+            [certainty-derivative.viewer.format :as format]
+            [certainty-derivative.viewer.sort :as sort]))
 
 (defn render [records]
   (doseq [record records]
