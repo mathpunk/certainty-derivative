@@ -2,7 +2,8 @@
   (:require [certainty-derivative.loader.read :refer [read-files]]
             [certainty-derivative.options :as options]
             [certainty-derivative.viewer.format :as format]
-            [certainty-derivative.viewer.sort :as sort]))
+            [certainty-derivative.viewer.sort :as sort]
+            [clojure.string :as string]))
 
 (defn render [records]
   (doseq [record records]
@@ -14,4 +15,6 @@
   (let [command (options/parse args)
         records (apply read-files (command :arguments))
         sorted (sort/dispatch-sort command records)]
-    (render sorted)))
+    (if-let [errors (get command :errors)]
+      (println (string/join "\n" errors))
+      (render sorted))))
