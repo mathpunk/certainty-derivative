@@ -1,7 +1,7 @@
 (ns certainty-derivative.viewer.sort-test
   (:require [certainty-derivative.loader.transform :refer [string->date]]
             [certainty-derivative.viewer.sort :refer :all]
-            [clojure.test :refer [deftest is]]))
+            [clojure.test :refer [deftest is testing]]))
 
 (def sample-input [{:certainty-derivative.record/last-name "Alexander"
                     :certainty-derivative.record/first-name "Mya"
@@ -34,24 +34,38 @@
                               [:certainty-derivative.record/date-of-birth]
                               string->date)) sample-input))
 
-(deftest test-last-name-sort
-  (let [sorted (sort-by-last-name-descending sample)]
-    (is (= "Wright" ((first sorted) :certainty-derivative.record/last-name)))
-    (is (= "Alberts" ((last sorted) :certainty-derivative.record/last-name)))
-    ))
+(deftest test-last-name-descending-sort
+  (let [expected (reverse '("Alberts" "Alexander" "Cunningham" "Henry" "Wright"))
+        sorted (sort-by-last-name-descending sample)]
+    (is (= expected (map :certainty-derivative.record/last-name sorted)))))
 
 (defn is-female? [record]
   (= "f" (record :certainty-derivative.record/gender)))
 
 (deftest test-gender-sort
-  (let [expected '("Cunningham" "Wright" "Alberts" "Alexander" "Henry")]
-    (is (= expected (->> sample
-                         sort-by-gender-and-last-name-ascending
-                         (map :certainty-derivative.record/last-name))))))
+  (let [expected '("Cunningham" "Wright" "Alberts" "Alexander" "Henry")
+        sorted (sort-by-gender-and-last-name-ascending sample)]
+    (is (= expected (map :certainty-derivative.record/last-name sorted)))))
 
 (deftest test-dob-sort
-  (let [expected '("Alberts" "Henry" "Wright" "Alexander" "Cunningham")]
-    (is (= expected (->> sample
-                         sort-by-date-of-birth-ascending
-                         (map :certainty-derivative.record/last-name))))))
+  (let [expected '("Alberts" "Henry" "Wright" "Alexander" "Cunningham")
+        sorted (sort-by-date-of-birth-ascending sample)]
+    (is (= expected (map :certainty-derivative.record/last-name sorted)))))
+
+(deftest test-sort-dispatch
+  (testing "last name"
+    (let [expected (reverse '("Alberts" "Alexander" "Cunningham" "Henry" "Wright"))
+          sorted (dispatch-sort {:options {:sort "lname"}} sample)]
+      (is (= expected (map :certainty-derivative.record/last-name sorted)))))
+  (testing "women first, otherwise by last name"
+    (let [expected '("Cunningham" "Wright" "Alberts" "Alexander" "Henry")
+          sorted (dispatch-sort {:options {:sort "women"}} sample)]
+      (is (= expected (map :certainty-derivative.record/last-name sorted)))))
+  (testing "date of birth ascending"
+    (let [expected '("Alberts" "Henry" "Wright" "Alexander" "Cunningham")
+          sorted (dispatch-sort {:options {:sort "dob"}} sample)]
+      (is (= expected (map :certainty-derivative.record/last-name sorted))))))
+
+
+
 

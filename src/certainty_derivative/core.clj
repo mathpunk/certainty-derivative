@@ -1,5 +1,8 @@
 (ns certainty-derivative.core
   (:require [certainty-derivative.loader.read :refer [read-files]]
+            [certainty-derivative.options :as options]
+            [certainty-derivative.viewer.sort :as sort]
+            [clojure.tools.cli :refer [parse-opts]]
             [certainty-derivative.viewer.format :as format]))
 
 (defn -main []
@@ -12,5 +15,7 @@
         println)))
 
 (defn view [& args]
-  (let [records (apply read-files args)]
-    (render records)))
+  (let [command (options/parse args)
+        records (apply read-files (command :arguments))
+        sorted (sort/dispatch-sort command records)]
+    (render sorted)))
