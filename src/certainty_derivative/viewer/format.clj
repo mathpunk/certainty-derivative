@@ -1,6 +1,7 @@
 (ns certainty-derivative.viewer.format
   (:require certainty-derivative.record
-            [java-time :as time]))
+            [java-time :as time]
+            [clojure.set :as set]))
 
 (defn friendly-name [record]
   (str (record :certainty-derivative.record/first-name)
@@ -33,3 +34,17 @@
          " favorite color is "
          (record :certainty-derivative.record/favorite-color)
          ".")))
+
+
+(def fully-qualified-keys
+  {:last-name :certainty-derivative.record/last-name
+   :first-name :certainty-derivative.record/first-name
+   :gender :certainty-derivative.record/gender
+   :favorite-color :certainty-derivative.record/favorite-color
+   :date-of-birth :certainty-derivative.record/date-of-birth})
+
+(defn json-format [record]
+  (-> record
+      (set/rename-keys (set/map-invert fully-qualified-keys))
+      (update :date-of-birth
+              #(time/format "MM/dd/yyyy" %))))

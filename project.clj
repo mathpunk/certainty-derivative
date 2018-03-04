@@ -10,6 +10,7 @@
                  [ring/ring-core "1.6.3"]
                  [ring/ring-jetty-adapter "1.6.3"]
                  [ring/ring-mock "0.3.2"]
+                 [ring/ring-json "0.4.0"]
                  [compojure "1.6.0"]
                  ]
   :plugins [[lein-ring "0.12.3"]]
