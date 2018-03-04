@@ -39,9 +39,6 @@
         sorted (by-last-name sample)]
     (is (= expected (map :certainty-derivative.record/last-name sorted)))))
 
-(defn is-female? [record]
-  (= "f" (record :certainty-derivative.record/gender)))
-
 (deftest test-gender-sort
   (let [expected '("Cunningham" "Wright" "Alberts" "Alexander" "Henry")
         sorted (by-gender-and-last-name sample)]

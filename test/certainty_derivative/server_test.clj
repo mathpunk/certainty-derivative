@@ -18,18 +18,21 @@
 
 (deftest test-endpoints-status
   (is (= 200 (get (app gender-request) :status)))
-  #_(is (= 200 (get (app birthdate-request) :status)))
-  #_(is (= 200 (get (app gender-request) :status))))
+  (is (= 200 (get (app birthdate-request) :status)))
+  (is (= 200 (get (app gender-request) :status)))
+  #_(is (= 200 (get (app post-request) :status)))
+  )
 
 (deftest test-endpoints-content-type
+  (is (string/includes? (-> (app birthdate-request)
+                            :headers
+                            (get "Content-Type")) "application/json"))
   (is (string/includes? (-> (app gender-request)
                             :headers
-                            (get "Content-Type"))
-                        "application/json")))
-
-#_(deftest your-json-handler-test
-    (is (= (your-handler (-> (mock/request :post "/api/endpoint")
-                             (mock/json-body {:foo "bar"})))
-           {:status  201
-            :headers {"content-type" "application/json"}
-            :body    {:key "your expected result"}})))
+                            (get "Content-Type")) "application/json"))
+  (is (string/includes? (-> (app name-request)
+                            :headers
+                            (get "Content-Type")) "application/json"))
+  #_(is (string/includes? (-> (app post-request)
+                              :headers
+                              (get "Content-Type")) "application/json")) )
