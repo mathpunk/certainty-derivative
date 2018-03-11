@@ -18,17 +18,11 @@
            {:data (ex-data e)}))
 
 (deftest test-file-parsing
-  (try
-    (generate-test-data 20)
-    (catch NumberFormatException e
-      (throw (phase-instrument e "GENERATION"))))
-  (let [data (try
+  (generate-test-data 20)
+  (let [data (try 
                (read-files "./resources/001.txt"
                            "./resources/002.txt"
                            "./resources/003.txt")
                (catch NumberFormatException e
-                 (throw (phase-instrument e "READING"))))]
-    (is (every? #(try
-                   (s/valid? :certainty-derivative.record/row %)
-                   (catch NumberFormatException e
-                     (throw (phase-instrument e "VALIDATION")))) data))))
+                 (throw (phase-instrument e "READING (not parsing?)"))))]
+    (is (every? #(s/valid? :certainty-derivative.record/row %) data))))
