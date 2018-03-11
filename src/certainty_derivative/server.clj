@@ -1,39 +1,48 @@
 (ns certainty-derivative.server
-  (:require [compojure.core :refer :all]
-            [ring.util.response :as res]
+  (:require [certainty-derivative.generator :as gen]
+            [certainty-derivative.loader.read :as read]
             [certainty-derivative.viewer.format :as format]
+            [certainty-derivative.viewer.sort :as sort]
+            [compojure.core :refer :all]
             [compojure.handler :as handler]
             [ring.middleware.json :as middle]
-            [certainty-derivative.generator :as gen]
-            [certainty-derivative.loader.read :as read]
-            [compojure.route :as route]
-            [clojure.java.io :as io]
-            [certainty-derivative.viewer.sort :as sort]))
+            [ring.util.response :as res]))
 
 (defn init []
   (gen/generate-test-data 30))
 
 (def records
-  (read/read-files "./resources/001.txt" "./resources/002.txt" "./resources/003.txt"))
+  (atom (read/read-files "./resources/001.txt" "./resources/002.txt" "./resources/003.txt")))
+
+#_(defn add-record! [input-record]
+    (swap! records conj (xform/parse-row input-record)))
 
 (def json-response
   {"gender" {:description "Females first, then sorted by last name"
-             :records (->> records
+             :records (->> @records
                            sort/by-gender-and-last-name
                            (map format/json-format))}
    "birthdate" {:description "Sorted by date of birth"
-                :records (->> records
+                :records (->> @records
                               sort/by-date-of-birth
                               (map format/json-format))}
    "name" {:description "Sorted by last name, descending"
-           :records (->> records
+           :records (->> @records
                          sort/by-last-name
                          reverse
                          (map format/json-format))}})
 
+(def landing-page
+  "Routes available:
+  - /records
+  - /records/gender
+  - /records/birthdate
+  - /records/name")
+
+
 (defroutes app-routes
   (GET "/favicon.ico" [] "")
-  (GET "/" [] (-> "Hello world"
+  (GET "/" [] (-> landing-page
                   res/response
                   (res/content-type "text/plain")))
   (GET "/records/gender" []
@@ -41,11 +50,13 @@
   (GET "/records/birthdate" []
        (res/response (json-response "birthdate")))
   (GET "/records/name" []
-       (res/response (json-response "name"))))
+       (res/response (json-response "name")))
+  #_(POST "/records" [input-record]
+          (add-record! input-record)
+          (res/response {:description "Posted record"
+                         :record (xform/parse-row input-record)})))
 
 (def app
   (-> (handler/api app-routes)
       (middle/wrap-json-body {:keywords? true})
       (middle/wrap-json-response)))
-
-;; • POST /records - Post a single data line in any of the 3 formats supported by your existing code

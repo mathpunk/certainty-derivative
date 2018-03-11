@@ -7,10 +7,7 @@
             [clojure.string :as string]))
 
 (deftest hello-testing
-  (is (= (app (mock/request :get "/"))
-         {:status  200
-          :headers {"Content-Type" "text/plain"}
-          :body    "Hello world"})))
+  (is (= 200 (get (app (mock/request :get "/")) :status))))
 
 (def post-request (mock/request :post "/records"))
 (def gender-request (mock/request :get "/records/gender"))
