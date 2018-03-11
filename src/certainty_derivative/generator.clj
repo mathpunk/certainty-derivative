@@ -90,7 +90,7 @@
    (date-of-birth)])
 
 (defn generate-sample-data [n]
-  (take n (repeatedly sample-data)))
+  (repeatedly n sample-data))
 
 (defn generate-sample-rows [n option]
   (let [delineator (cond (= option :comma) ", "
