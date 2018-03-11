@@ -6,11 +6,11 @@
   (let [acc (transient [])]
     (with-open [r (clojure.java.io/reader filename)]
       (doseq [line (line-seq r)]
-        (try 
+        (try
           (conj! acc (xform/parse-row line))
           (catch NumberFormatException e
-            (throw "NumberFormatException while parsing line:"
-                   {:line line}))
+            (throw (ex-info "NumberFormatException while parsing line:"
+                            {:line line})))
           )))
     (persistent! acc)))
 
