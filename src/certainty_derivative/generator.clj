@@ -42,16 +42,15 @@
 ;; - some people might decline to adjust the menu, and
 ;; - there is no reason to to record transgender status
 
-(def non-binary-gender-options ["Prefer not to say"
-                                "Non-binary / third gender"
-                                ""])
+(def non-binary-gender-options ["x"       ;; "Prefer not to say"
+                                "nb/3rd"  ;; "Non-binary / 3rd gender"
+                                ])
 
 (defn gender []
   (let [choice (rand-int 1000)]
     (cond (< choice 5) (rand-nth non-binary-gender-options)
           (even? choice) "f"
           :else "m")))
-
 
 ;; Color
 ;; ================
