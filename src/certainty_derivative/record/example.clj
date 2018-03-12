@@ -29,7 +29,7 @@
 
 (def sample-input [{:certainty-derivative.record/last-name "Alexander"
                     :certainty-derivative.record/first-name "Mya"
-                    :certainty-derivative.record/gender "Decline to state"
+                    :certainty-derivative.record/gender "x"
                     :certainty-derivative.record/favorite-color "green"
                     :certainty-derivative.record/date-of-birth "1979-3-23"},
                    {:certainty-derivative.record/last-name "Henry",
