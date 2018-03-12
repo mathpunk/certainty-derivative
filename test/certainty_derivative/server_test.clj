@@ -38,7 +38,7 @@
                  :body
                  (json/decode true))
         records (body :records)]
-    (testing "structure" 
+    (testing "structure"
       (is (contains? body :description ))
       (is (contains? body :records ))
       (is (every? #(= #{:last-name
@@ -54,9 +54,9 @@
 (deftest test-post-records-client-perspective
   (let [response (app (-> (mock/request :post "/records")
                           (mock/json-body example-pipe-row)))
+        headers (response :headers)
         body (json/decode (response :body) true)]
-    (= 200 (response :status))
-    (= {"Content-Type" "application/json"} (response :headers))
+    (is (= 200 (response :status)))
+    (is (string/includes? (get headers "Content-Type")  "application/json"))
     (is (contains? body :record))
     ))
-
