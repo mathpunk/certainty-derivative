@@ -34,10 +34,9 @@
 
 (def landing-page
   "Routes available:
-  - /records
-  - /records/gender
+  - /records/gender ('f' first)
   - /records/birthdate
-  - /records/name")
+  - /records/name (reverse sort)")
 
 
 (defroutes app-routes
@@ -51,10 +50,9 @@
        (res/response (json-response "birthdate")))
   (GET "/records/name" []
        (res/response (json-response "name")))
-  #_(POST "/records" [input-record]
-          (add-record! input-record)
-          (res/response {:description "Posted record"
-                         :record (xform/parse-row input-record)})))
+  (POST "/records" [input-record]
+        (res/response {:description "Success! Probably!"
+                       :record input-record})))
 
 (def app
   (-> (handler/api app-routes)
