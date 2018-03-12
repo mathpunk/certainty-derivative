@@ -14,7 +14,7 @@
 
 (deftest test-option-elements
   (is (s/valid? :certainty-derivative.options/sort "lname"))
-  (is (not (s/valid? :certainty-derivative.options/sort "fname"))))
+  (is (not (s/valid? :certainty-derivative.options/sort "fname")))) ;; Not implemented
 
 (deftest test-parsed-arguments
   (is (some #{"./resources/001.txt"}
