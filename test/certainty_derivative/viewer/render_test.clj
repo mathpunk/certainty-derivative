@@ -10,13 +10,13 @@
 (deftest test-rendering
   (let [records [(parse-row example/example-comma-row)]
         output (atom [])]
-    (with-redefs [out (fn [s] (swap! output conj s))] ;; Mock io of render
+    (with-redefs [out (fn [s] (swap! output conj s))] ;; Mock the io of render
       (render records)
       (let [printed (first @output)]
         (is (string? printed))
-        (string/includes? printed example/example-first-name)
-        (string/includes? printed example/example-last-name)
-        (string/includes? printed example/example-favorite-color)
-        (string/includes? printed "His")
-        (string/includes? printed "(M)")
-        (string/includes? printed "03/23/1976")))))
+        (is (string/includes? printed example/example-first-name))
+        (is (string/includes? printed example/example-last-name))
+        (is (string/includes? printed example/example-favorite-color))
+        (is (string/includes? printed "His"))
+        (is (string/includes? printed "(male)"))
+        (is (string/includes? printed "03/23/1976"))))))
