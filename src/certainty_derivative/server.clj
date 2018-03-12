@@ -5,34 +5,36 @@
             [certainty-derivative.viewer.sort :as sort]
             [compojure.core :refer :all]
             [compojure.handler :as handler]
-            [ring.middleware.json :as middle]
+            [ring.middleware.json :as json]
+            [ring.middleware.params :as params]
             [ring.util.response :as res]
             [certainty-derivative.loader.transform :as xform]
             [ring.mock.request :as mock]))
+
 
 (defn init []
   (gen/generate-test-data 30))
 
 (def records
-  (atom (read/read-files "./resources/001.txt" "./resources/002.txt" "./resources/003.txt")))
+  (atom (read/read-files "./resources/001.txt"
+                         "./resources/002.txt"
+                         "./resources/003.txt")))
 
 #_(defn add-record! [input-record]
     (swap! records conj (xform/parse-row input-record)))
 
+(defn prepare-records [ordering]
+  (->> @records
+       ordering
+       (map format/json-format)))
+
 (def json-response
   {"gender" {:description "Females first, then sorted by last name"
-             :records (->> @records
-                           sort/by-gender-and-last-name
-                           (map format/json-format))}
+             :records (prepare-records sort/by-gender-and-last-name)}
    "birthdate" {:description "Sorted by date of birth"
-                :records (->> @records
-                              sort/by-date-of-birth
-                              (map format/json-format))}
+                :records (prepare-records sort/by-date-of-birth)}
    "name" {:description "Sorted by last name, descending"
-           :records (->> @records
-                         sort/by-last-name
-                         reverse
-                         (map format/json-format))}})
+           :records (prepare-records (comp reverse sort/by-last-name))}})
 
 (def landing-page
   "Routes available:
@@ -58,19 +60,21 @@
 
 (def app
   (-> (handler/api app-routes)
-      (middle/wrap-json-body {:keywords? true})
-      (middle/wrap-json-response)))
+      (json/wrap-json-body {:keywords? true})
+      (json/wrap-json-response)
+      (params/wrap-params)))
+
 
 ;; REPL testing
 ;; ==================
-
 (require '[ring.mock.request :as mock]
          '[certainty-derivative.record.example :refer :all]
          '[clojure.string :as string])
 
-(app (-> (mock/request :post "/records")
-         (mock/json-body example-comma-row)))
+example-comma-row
 
+(app (-> (mock/request :post "/records")
+         (mock/json-body [example-comma-row])))
 
 
 ;; (detect-delimiter example-comma-row)
