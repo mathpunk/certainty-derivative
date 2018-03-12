@@ -5,9 +5,13 @@
             [certainty-derivative.viewer.format :as format]
             [certainty-derivative.viewer.sort :as sort]))
 
+(defn find-records [args]
+  (let [filenames (get (options/parse args) :arguments)]
+    (apply read-files filenames)))
 
 (defn view [& args]
-  (let [command (options/parse args)
-        records (apply read-files (command :arguments))
-        sorted (sort/dispatch-sort command records)]
+  (let [records (find-records args)
+        sorted (sort/dispatch-sort (options/parse args) records)]
     (render sorted)))
+
+
