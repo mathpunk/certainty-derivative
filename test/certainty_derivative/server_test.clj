@@ -17,13 +17,12 @@
 (def birthdate-request (mock/request :get "/records/birthdate"))
 (def name-request (mock/request :get "/records/name"))
 
-(deftest test-endpoints-status
+(deftest test-get-endpoints-status
   (is (= 200 (get (app gender-request) :status)))
   (is (= 200 (get (app birthdate-request) :status)))
-  (is (= 200 (get (app gender-request) :status)))
-  (is (= 200 (get (app post-request) :status))))
+  (is (= 200 (get (app gender-request) :status))))
 
-(deftest test-endpoints-content-type
+(deftest test-get-endpoints-content-type
   (is (string/includes? (-> (app birthdate-request)
                             :headers
                             (get "Content-Type")) "application/json"))
@@ -31,9 +30,6 @@
                             :headers
                             (get "Content-Type")) "application/json"))
   (is (string/includes? (-> (app name-request)
-                            :headers
-                            (get "Content-Type")) "application/json"))
-  (is (string/includes? (-> (app post-request)
                             :headers
                             (get "Content-Type")) "application/json")))
 
@@ -55,7 +51,7 @@
             expected-name-seq (reverse (sort (map :last-name records)))]
         (is (= actual-name-seq expected-name-seq))))))
 
-(deftest test-put-records-client-perspective
+(deftest test-post-records-client-perspective
   (let [response (app (-> (mock/request :post "/records")
                           (mock/json-body example-pipe-row)))
         body (json/decode (response :body) true)]

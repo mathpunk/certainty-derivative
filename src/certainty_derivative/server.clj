@@ -6,7 +6,9 @@
             [compojure.core :refer :all]
             [compojure.handler :as handler]
             [ring.middleware.json :as middle]
-            [ring.util.response :as res]))
+            [ring.util.response :as res]
+            [certainty-derivative.loader.transform :as xform]
+            [ring.mock.request :as mock]))
 
 (defn init []
   (gen/generate-test-data 30))
@@ -50,11 +52,30 @@
        (res/response (json-response "birthdate")))
   (GET "/records/name" []
        (res/response (json-response "name")))
-  (POST "/records" [input-record]
+  (POST "/records" [req]
         (res/response {:description "Success! Probably!"
-                       :record input-record})))
+                       :record req})))
 
 (def app
   (-> (handler/api app-routes)
       (middle/wrap-json-body {:keywords? true})
       (middle/wrap-json-response)))
+
+;; REPL testing
+;; ==================
+
+(require '[ring.mock.request :as mock]
+         '[certainty-derivative.record.example :refer :all]
+         '[clojure.string :as string])
+
+(app (-> (mock/request :post "/records")
+         (mock/json-body example-comma-row)))
+
+
+
+;; (detect-delimiter example-comma-row)
+
+;; (tokenize-row example-comma-row)
+
+
+
