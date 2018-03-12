@@ -15,7 +15,8 @@
                  [compojure "1.6.0"]
                  ]
   :plugins [[lein-ring "0.12.3"]]
-  :ring {:handler certainty-derivative.server/app}
+  :ring {:init certainty-derivative.server/init
+         :handler certainty-derivative.server/app}
   :aliases {"view" ["run" "-m" "certainty-derivative.core/view"]
             "serve" ["ring" "server"]}
   )

@@ -3,6 +3,7 @@
             [clojure.java.io :as io]
             [clojure.string :as string]))
 
+
 ;; Names
 ;; ===============
 (def first-name-choices
@@ -52,6 +53,7 @@
           (even? choice) "f"
           :else "m")))
 
+
 ;; Color
 ;; ================
 (def color-choices
@@ -98,14 +100,16 @@
     (map #(string/join delineator %) (generate-sample-data n))))
 
 (defn clean-test-data [filename]
-  (-> filename
-      (io/resource)
-      (io/as-file)
-      (io/delete-file)))
+  (let [file (-> filename
+                 (io/resource)
+                 (io/as-file))]
+    (if (.exists file)
+      (io/delete-file file)
+      nil)))
 
 (defn generate-test-data [n]
   (doseq [file ["001.txt" "002.txt" "003.txt"]]
-    (clean-test-data file))
+    (clean-test-data file)) ;; TODO: Investigate fixtures
   (doseq [row (generate-sample-rows n :comma)]
     (spit "./resources/001.txt" (str row "\n") :append true))
   (doseq [row (generate-sample-rows n :space)]

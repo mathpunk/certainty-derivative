@@ -11,7 +11,7 @@
 (defn friendly-gender [record]
   (get {"m" " (male)"
         "f" " (female)"
-        "Non-binary / third gender" " (NB/3rd)"}
+        "nb/3rd" " (NB/3rd)"}
        (record :certainty-derivative.record/gender) ""))
 
 (defn friendly-date-of-birth [record]

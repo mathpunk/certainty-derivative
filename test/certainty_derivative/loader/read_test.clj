@@ -19,10 +19,10 @@
 
 (deftest test-file-parsing
   (generate-test-data 20)
-  (let [data (try 
+  (let [data (try
                (read-files "./resources/001.txt"
                            "./resources/002.txt"
                            "./resources/003.txt")
                (catch NumberFormatException e
-                 (throw (phase-instrument e "READING (not parsing?)"))))]
+                 (throw (phase-instrument e "READING"))))]
     (is (every? #(s/valid? :certainty-derivative.record/row %) data))))
