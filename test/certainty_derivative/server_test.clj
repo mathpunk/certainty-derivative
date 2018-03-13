@@ -55,8 +55,16 @@
   (let [response (app (-> (mock/request :post "/records")
                           (mock/json-body example-pipe-row)))
         headers (response :headers)
-        body (json/decode (response :body) true)]
-    (is (= 200 (response :status)))
+        body (json/decode (response :body) true)
+        parsed-record (body :record)]
     (is (string/includes? (get headers "Content-Type")  "application/json"))
+    (is (= 200 (response :status)))
+    ;; Note: The way I understand https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html, the status code would be 201 if (and only if) the record was assigned a URI. Since assigning such a URI was not a part of the requirements, I'm returning 200 instead. However, it seems friendly to return a parsed representation of the record in the response body.
     (is (contains? body :record))
-    ))
+    (is (= "Thomas" (parsed-record :first-name)))
+    (is (= "Henderson" (parsed-record :last-name)))
+    (is (= "m" (parsed-record :gender)))
+    (is (= "purple" (parsed-record :favorite-color)))
+    (is (= "03/23/1976" (parsed-record :date-of-birth)))))
+
+

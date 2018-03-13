@@ -42,7 +42,6 @@
   - /records/birthdate
   - /records/name (reverse sort)")
 
-
 (defroutes app-routes
   (GET "/favicon.ico" [] "")
   (GET "/" [] (-> landing-page
@@ -54,9 +53,12 @@
        (res/response (json-response "birthdate")))
   (GET "/records/name" []
        (res/response (json-response "name")))
-  (POST "/records" [req]
-        (res/response {:description "Success! Probably!"
-                       :record req})))
+  (POST "/records" req
+        (let [input-record (req :body)
+              parsed-record (xform/parse-row input-record)]
+          ;; persist record
+          (res/response {:description "Success!"
+                         :record (format/json-format parsed-record)}))))
 
 (def app
   (-> (handler/api app-routes)
@@ -67,19 +69,15 @@
 
 ;; REPL testing
 ;; ==================
-(require '[ring.mock.request :as mock]
-         '[certainty-derivative.record.example :refer :all]
-         '[clojure.string :as string])
+#_(require '[ring.mock.request :as mock]
+           '[certainty-derivative.record.example :refer :all]
+           '[cheshire.core :refer [decode]]
+           '[clojure.string :as string])
 
-example-comma-row
+#_example-comma-row
 
-(app (-> (mock/request :post "/records")
-         (mock/json-body [example-comma-row])))
-
-
-;; (detect-delimiter example-comma-row)
-
-;; (tokenize-row example-comma-row)
-
-
-
+#_(-> (app (-> (mock/request :post "/records")
+               (mock/json-body example-pipe-row)))
+      :body
+      (decode true)
+      )
