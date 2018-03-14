@@ -1,5 +1,7 @@
 (ns certainty-derivative.record.example
-  (:require [clojure.string :as string]))
+  (:require [clojure.string :as string]
+            [certainty-derivative.loader.transform :as xform]
+            [certainty-derivative.viewer.format :as format]))
 
 
 (def example-first-name "Thomas")
@@ -26,7 +28,6 @@
                                           example-favorite-color
                                           example-date-of-birth]))
 
-
 (def sample-input [{:certainty-derivative.record/last-name "Alexander"
                     :certainty-derivative.record/first-name "Mya"
                     :certainty-derivative.record/gender "x"
@@ -52,3 +53,8 @@
                     :certainty-derivative.record/gender "m",
                     :certainty-derivative.record/favorite-color "purple",
                     :certainty-derivative.record/date-of-birth "1902-9-2"}])
+
+(def sample (map (fn [record]
+                   (update-in record
+                              [:certainty-derivative.record/date-of-birth]
+                              xform/string->date)) sample-input))
