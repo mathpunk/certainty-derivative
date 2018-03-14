@@ -1,5 +1,6 @@
 (ns certainty-derivative.options
   (:require [clojure.java.io :as io]
+            [certainty-derivative.viewer.sort :as sort]
             [clojure.spec.alpha :as s]
             [clojure.tools.cli :refer [parse-opts]]))
 
@@ -25,3 +26,13 @@
 
 (defn parse [args]
   (parse-opts args flag-options))
+
+(defn dispatch-sort [options records]
+  (let [strategy (get-in options [:options :sort])
+        direction (if (get-in options [:options :reverse])
+                    reverse
+                    identity)]
+    (case strategy
+      "women" (direction (sort/by-gender-and-last-name records))
+      "lname" (direction (sort/by-last-name records))
+      "dob" (direction (sort/by-date-of-birth records)))))

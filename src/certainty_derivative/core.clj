@@ -11,7 +11,7 @@
 
 (defn view [& args]
   (let [records (find-records args)
-        sorted (sort/dispatch-sort (options/parse args) records)]
+        sorted (options/dispatch-sort (options/parse args) records)]
     (render sorted)))
 
 
