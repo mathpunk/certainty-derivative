@@ -3,7 +3,6 @@
             [certainty-derivative.loader.transform :as xform]
             [certainty-derivative.viewer.format :as format]))
 
-
 (def example-first-name "Thomas")
 (def example-last-name "Henderson")
 (def example-favorite-color "purple")
@@ -28,33 +27,18 @@
                                           example-favorite-color
                                           example-date-of-birth]))
 
-(def sample-input [{:certainty-derivative.record/last-name "Alexander"
-                    :certainty-derivative.record/first-name "Mya"
-                    :certainty-derivative.record/gender "x"
-                    :certainty-derivative.record/favorite-color "green"
-                    :certainty-derivative.record/date-of-birth "1979-3-23"},
-                   {:certainty-derivative.record/last-name "Henry",
-                    :certainty-derivative.record/first-name "Giovanni",
-                    :certainty-derivative.record/gender "m",
-                    :certainty-derivative.record/favorite-color "orange",
-                    :certainty-derivative.record/date-of-birth "1941-7-16"},
-                   {:certainty-derivative.record/last-name "Wright",
-                    :certainty-derivative.record/first-name "Camila",
-                    :certainty-derivative.record/gender "f",
-                    :certainty-derivative.record/favorite-color "orange",
-                    :certainty-derivative.record/date-of-birth "1970-3-28"},
-                   {:certainty-derivative.record/last-name "Cunningham",
-                    :certainty-derivative.record/first-name "Paul",
-                    :certainty-derivative.record/gender "f",
-                    :certainty-derivative.record/favorite-color "green",
-                    :certainty-derivative.record/date-of-birth "1995-7-19"},
-                   {:certainty-derivative.record/last-name "Alberts",
-                    :certainty-derivative.record/first-name "Margaret",
-                    :certainty-derivative.record/gender "m",
-                    :certainty-derivative.record/favorite-color "purple",
-                    :certainty-derivative.record/date-of-birth "1902-9-2"}])
+(def example-comma-rows ["Alexander, Mya, x, green, 1979-3-23"
+                         "Henry, Giovanni, m, orange, 1941-7-16"])
 
-(def sample (map (fn [record]
-                   (update-in record
-                              [:certainty-derivative.record/date-of-birth]
-                              xform/string->date)) sample-input))
+(def example-space-rows ["Wright Camila f orange 1970-3-28"
+                         "Cunningham Paul m green 1995-7-19"])
+
+(def example-pipe-rows ["Alberts | Margaret | f | purple | 1902-9-2"
+                        "Jenkins | James | m | red | 1928-2-13"])
+
+(def example-input (concat example-comma-rows example-space-rows example-pipe-rows))
+
+(def example-state (map xform/parse-row example-input))
+
+(def example-json-output (map format/json-format example-state))
+
