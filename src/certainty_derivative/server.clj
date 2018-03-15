@@ -1,16 +1,14 @@
 (ns certainty-derivative.server
   (:require [certainty-derivative.generator :as gen]
             [certainty-derivative.loader.read :as read]
+            [certainty-derivative.loader.transform :as xform]
             [certainty-derivative.viewer.format :as format]
             [certainty-derivative.viewer.sort :as sort]
             [compojure.core :refer :all]
             [compojure.handler :as handler]
             [ring.middleware.json :as json]
             [ring.middleware.params :as params]
-            [ring.util.response :as res]
-            [certainty-derivative.loader.transform :as xform]
-            [ring.mock.request :as mock]))
-
+            [ring.util.response :as res]))
 
 (defn init []
   (gen/generate-test-data 30))

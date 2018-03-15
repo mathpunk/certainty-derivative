@@ -1,11 +1,9 @@
 (ns certainty-derivative.viewer.render-test
-  (:require [certainty-derivative.viewer.render :refer :all]
+  (:require [certainty-derivative.loader.transform :refer [parse-row]]
             [certainty-derivative.record.example :as example]
-            [certainty-derivative.loader.transform :refer [parse-row]]
-            [clojure.test :refer [deftest testing is]]
-            [certainty-derivative.viewer.format :as format]
-            [clojure.string :as string]))
-
+            [certainty-derivative.viewer.render :refer :all]
+            [clojure.string :as string]
+            [clojure.test :refer [deftest is]]))
 
 (deftest test-rendering
   (let [records [(parse-row example/example-comma-row)]

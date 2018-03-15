@@ -1,15 +1,9 @@
 (ns certainty-derivative.loader.transform-test
   (:require [certainty-derivative.loader.transform :refer :all]
-            [certainty-derivative.record.example :refer [
-                                                         example-space-row
-                                                         example-comma-row
-                                                         example-pipe-row
-                                                         example-space-rows
-                                                         example-comma-rows
-                                                         example-pipe-rows
-                                                         ]]
+            [certainty-derivative.record.example
+             :refer
+             [example-comma-row example-pipe-row example-space-row]]
             [clojure.spec.alpha :as s]
-            [clojure.string :as string]
             [clojure.test :refer [deftest is]]))
 
 (deftest test-format-classification

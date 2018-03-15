@@ -1,9 +1,8 @@
 (ns certainty-derivative.options-test
-  (:require  [certainty-derivative.options :refer :all]
-             [certainty-derivative.record.example :refer [example-state]]
-             [clojure.test :refer [deftest testing is]]
-             [clojure.spec.alpha :as s]
-             [clojure.string :as string]))
+  (:require [certainty-derivative.options :refer :all]
+            [certainty-derivative.record.example :refer [example-state]]
+            [clojure.spec.alpha :as s]
+            [clojure.test :refer [deftest is testing]]))
 
 (deftest test-argument-elements
   (is (s/valid? :certainty-derivative.options/file

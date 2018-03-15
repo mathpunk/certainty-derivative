@@ -1,6 +1,6 @@
 (ns certainty-derivative.viewer.format-test
-  (:require [certainty-derivative.viewer.format :refer :all]
-            [certainty-derivative.loader.transform :refer [string->date]]
+  (:require [certainty-derivative.loader.transform :refer [string->date]]
+            [certainty-derivative.viewer.format :refer :all]
             [clojure.string :as string]
             [clojure.test :refer [deftest is]]))
 

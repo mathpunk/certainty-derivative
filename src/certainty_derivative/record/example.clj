@@ -1,7 +1,7 @@
 (ns certainty-derivative.record.example
-  (:require [clojure.string :as string]
-            [certainty-derivative.loader.transform :as xform]
-            [certainty-derivative.viewer.format :as format]))
+  (:require [certainty-derivative.loader.transform :as xform]
+            [certainty-derivative.viewer.format :as format]
+            [clojure.string :as string]))
 
 (def example-first-name "Thomas")
 (def example-last-name "Henderson")

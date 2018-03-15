@@ -1,8 +1,7 @@
 (ns certainty-derivative.viewer.sort-test
-  (:require [certainty-derivative.loader.transform :refer [string->date]]
-            [certainty-derivative.record.example :refer [example-state]]
+  (:require [certainty-derivative.record.example :refer [example-state]]
             [certainty-derivative.viewer.sort :refer :all]
-            [clojure.test :refer [deftest is testing]]))
+            [clojure.test :refer [deftest is]]))
 
 (deftest test-last-name-ascending-sort
   (let [expected '("Alberts" "Alexander" "Cunningham" "Henry" "Jenkins" "Wright")

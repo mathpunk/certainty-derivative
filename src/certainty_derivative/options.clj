@@ -1,6 +1,6 @@
 (ns certainty-derivative.options
-  (:require [clojure.java.io :as io]
-            [certainty-derivative.viewer.sort :as sort]
+  (:require [certainty-derivative.viewer.sort :as sort]
+            [clojure.java.io :as io]
             [clojure.spec.alpha :as s]
             [clojure.tools.cli :refer [parse-opts]]))
 

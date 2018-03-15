@@ -1,9 +1,7 @@
 (ns certainty-derivative.core
   (:require [certainty-derivative.loader.read :refer [read-files]]
             [certainty-derivative.options :as options]
-            [certainty-derivative.viewer.render :refer [render]]
-            [certainty-derivative.viewer.format :as format]
-            [certainty-derivative.viewer.sort :as sort]))
+            [certainty-derivative.viewer.render :refer [render]]))
 
 (defn find-records [args]
   (let [filenames (get (options/parse args) :arguments)]

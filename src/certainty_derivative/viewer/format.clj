@@ -1,7 +1,7 @@
 (ns certainty-derivative.viewer.format
   (:require certainty-derivative.record
-            [java-time :as time]
-            [clojure.set :as set]))
+            [clojure.set :as set]
+            [java-time :as time]))
 
 (defn friendly-name [record]
   (str (record :certainty-derivative.record/first-name)

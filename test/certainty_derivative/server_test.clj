@@ -1,17 +1,13 @@
 (ns certainty-derivative.server-test
-  (:require [certainty-derivative.server :refer :all]
-            [certainty-derivative.record.example :refer [example-comma-row
-                                                         example-space-row
-                                                         example-pipe-row
-                                                         example-state]]
-            [clojure.set :refer [subset?]]
-            [ring.mock.request :as mock]
+  (:require [certainty-derivative.loader.transform :as xform]
+            [certainty-derivative.record.example
+             :refer
+             [example-pipe-row example-space-row]]
+            [certainty-derivative.server :refer :all]
             [cheshire.core :as json]
-            [clojure.test :refer [deftest testing is]]
             [clojure.string :as string]
-            [certainty-derivative.viewer.format :as format]
-            [certainty-derivative.loader.transform :as xform]
-            [java-time :as time]))
+            [clojure.test :refer [deftest is testing]]
+            [ring.mock.request :as mock]))
 
 (deftest test-there-is-a-landing-page
   (is (= 200 (get (app (mock/request :get "/")) :status))))
@@ -85,7 +81,7 @@
           gender-partitions (partition-by #(= "f" (get % :gender)) records-served)]
       (is (every? #(ascending? (map :last-name %)) gender-partitions)))))
 
-(deftest test-adding-records
+(deftest test-posting-records
   (let [new-record (xform/parse-row example-space-row)]
     (swap! records (fn [records] (remove #(= new-record %) records))) ;; In case record already exists, as in re-running tests. Mocking, sierra/component, or with-redefs might be preferable.
     (testing "record shouldn't exist before post"
