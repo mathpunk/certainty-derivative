@@ -13,6 +13,7 @@
                  [ring/ring-json "0.4.0"]
                  [cheshire "5.8.0"]
                  [compojure "1.6.0"]
+                 [hiccup "1.0.5"]
                  ]
   :plugins [[lein-ring "0.12.3"]]
   :ring {:init certainty-derivative.generator/init
