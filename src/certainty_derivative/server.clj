@@ -20,21 +20,16 @@
                          "./resources/002.txt"
                          "./resources/003.txt")))
 
-#_(defn add-record! [input-record]
-    (swap! records conj (xform/parse-row input-record)))
-
-(defn prepare-records [ordering]
-  (->> @records
-       ordering
-       (map format/json-format)))
+(defn add-record! [record]
+  (swap! records conj record))
 
 (def json-response
   {"gender" {:description "Females first, then sorted by last name"
-             :records (prepare-records sort/by-gender-and-last-name)}
+             :records (map format/json-format (sort/by-gender-and-last-name @records))}
    "birthdate" {:description "Sorted by date of birth"
-                :records (prepare-records sort/by-date-of-birth)}
+                :records (map format/json-format (sort/by-date-of-birth @records))}
    "name" {:description "Sorted by last name, descending"
-           :records (prepare-records (comp reverse sort/by-last-name))}})
+           :records (map format/json-format (reverse (sort/by-last-name @records)))}})
 
 (def landing-page
   "Routes available:
@@ -56,7 +51,7 @@
   (POST "/records" req
         (let [input-record (req :body)
               parsed-record (xform/parse-row input-record)]
-          ;; persist record
+          (add-record! parsed-record)
           (res/response {:description "Success!"
                          :record (format/json-format parsed-record)}))))
 
@@ -65,19 +60,3 @@
       (json/wrap-json-body {:keywords? true})
       (json/wrap-json-response)
       (params/wrap-params)))
-
-
-;; REPL testing
-;; ==================
-#_(require '[ring.mock.request :as mock]
-           '[certainty-derivative.record.example :refer :all]
-           '[cheshire.core :refer [decode]]
-           '[clojure.string :as string])
-
-#_example-comma-row
-
-#_(-> (app (-> (mock/request :post "/records")
-               (mock/json-body example-pipe-row)))
-      :body
-      (decode true)
-      )

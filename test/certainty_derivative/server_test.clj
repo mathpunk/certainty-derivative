@@ -2,17 +2,20 @@
   (:require [certainty-derivative.server :refer :all]
             [certainty-derivative.record.example :refer [example-comma-row
                                                          example-space-row
-                                                         example-pipe-row]]
+                                                         example-pipe-row
+                                                         example-state]]
             [clojure.set :refer [subset?]]
             [ring.mock.request :as mock]
             [cheshire.core :as json]
             [clojure.test :refer [deftest testing is]]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [certainty-derivative.viewer.format :as format]
+            [certainty-derivative.loader.transform :as xform]
+            [java-time :as time]))
 
 (deftest test-there-is-a-landing-page
   (is (= 200 (get (app (mock/request :get "/")) :status))))
 
-(def post-request (mock/request :post "/records"))
 (def gender-request (mock/request :get "/records/gender"))
 (def birthdate-request (mock/request :get "/records/birthdate"))
 (def name-request (mock/request :get "/records/name"))
@@ -33,23 +36,65 @@
                             :headers
                             (get "Content-Type")) "application/json")))
 
-(deftest test-get-records
+(deftest test-get-records-structure
   (let [body (-> (app name-request)
                  :body
                  (json/decode true))
         records (body :records)]
-    (testing "structure"
-      (is (contains? body :description ))
-      (is (contains? body :records ))
-      (is (every? #(= #{:last-name
-                        :first-name
-                        :gender
-                        :favorite-color
-                        :date-of-birth} (set (keys %))) records)))
-    (testing "ordering"
-      (let [actual-name-seq (map :last-name records)
-            expected-name-seq (reverse (sort (map :last-name records)))]
-        (is (= actual-name-seq expected-name-seq))))))
+    (is (contains? body :description))
+    (is (every? #(contains? % :last-name) records))
+    (is (every? #(contains? % :first-name) records))
+    (is (every? #(contains? % :favorite-color) records))
+    (is (every? #(contains? % :gender) records))
+    (is (every? #(contains? % :date-of-birth) records))))
+
+(defn ascending?
+  "Given a sequence of comparable things, returns true if the sequence is increasing. Not required to be monotonic, i.e., a run of logically equivalent items does not itself falsify this predicate."
+  [sequence]
+  (let [pairs (partition 2 1 sequence)
+        comparisons (map (fn [pair] (apply compare pair)) pairs)]
+    (every? #(>= 0 %) comparisons)))
+
+(defn make-comparable
+  "Given a date formatted as mm/dd/yyyy, return a representation that can be compared."
+  [date-string]
+  (vec (map #(Integer. %)
+            (vector (last (string/split date-string #"/"))
+                    (first (string/split date-string #"/"))
+                    (second (string/split date-string #"/"))))))
+
+(deftest test-get-records-order
+  (testing "name ordering: last-name, descending"
+    (let [records-served (-> (app name-request)
+                             :body
+                             (json/decode true)
+                             :records)]
+      (is (ascending? (reverse (map :last-name records-served))))))
+  (testing "dob ordering: ascending"
+    (let [records-served (-> (app birthdate-request)
+                             :body
+                             (json/decode true)
+                             :records)
+          date-strings (map :date-of-birth records-served)]
+      (is (ascending? (map make-comparable date-strings)))))
+  (testing "gender ordering: female first, otherwise ascending by last-name"
+    (let [records-served (-> (app gender-request)
+                             :body
+                             (json/decode true)
+                             :records)
+          gender-partitions (partition-by #(= "f" (get % :gender)) records-served)]
+      (is (every? #(ascending? (map :last-name %)) gender-partitions)))))
+
+(deftest test-adding-records
+  (let [new-record (xform/parse-row example-space-row)]
+    (swap! records (fn [records] (remove #(= new-record %) records))) ;; In case record already exists, as in re-running tests. Mocking, sierra/component, or with-redefs might be preferable.
+    (testing "record shouldn't exist before post"
+      (is (nil? (some #{new-record} @records))))
+    (testing "record should exist after post" 
+      (app (-> (mock/request :post "/records")
+               (mock/json-body example-space-row)))
+      (is (some #{new-record} @records)))))
+
 
 (deftest test-post-records-client-perspective
   (let [response (app (-> (mock/request :post "/records")
@@ -66,5 +111,3 @@
     (is (= "m" (parsed-record :gender)))
     (is (= "purple" (parsed-record :favorite-color)))
     (is (= "03/23/1976" (parsed-record :date-of-birth)))))
-
-
