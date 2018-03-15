@@ -3,6 +3,7 @@
             [clojure.java.io :as io]
             [clojure.string :as string]))
 
+
 ;; Names
 ;; ===============
 (def first-name-choices
@@ -42,9 +43,9 @@
 ;; - some people might decline to adjust the menu, and
 ;; - there is no reason to to record transgender status
 
-(def non-binary-gender-options ["Prefer not to say"
-                                "Non-binary / third gender"
-                                ""])
+(def non-binary-gender-options ["x"       ;; "Prefer not to say"
+                                "nb/3rd"  ;; "Non-binary / 3rd gender"
+                                ])
 
 (defn gender []
   (let [choice (rand-int 1000)]
@@ -90,7 +91,7 @@
    (date-of-birth)])
 
 (defn generate-sample-data [n]
-  (take n (repeatedly sample-data)))
+  (repeatedly n sample-data))
 
 (defn generate-sample-rows [n option]
   (let [delineator (cond (= option :comma) ", "
@@ -99,14 +100,16 @@
     (map #(string/join delineator %) (generate-sample-data n))))
 
 (defn clean-test-data [filename]
-  (-> filename
-      (io/resource)
-      (io/as-file)
-      (io/delete-file)))
+  (let [file (-> filename
+                 (io/resource)
+                 (io/as-file))]
+    (if (.exists file)
+      (io/delete-file file)
+      nil)))
 
 (defn generate-test-data [n]
   (doseq [file ["001.txt" "002.txt" "003.txt"]]
-    (clean-test-data file))
+    (clean-test-data file)) ;; TODO: Investigate fixtures
   (doseq [row (generate-sample-rows n :comma)]
     (spit "./resources/001.txt" (str row "\n") :append true))
   (doseq [row (generate-sample-rows n :space)]

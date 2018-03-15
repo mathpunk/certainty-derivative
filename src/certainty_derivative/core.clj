@@ -1,20 +1,17 @@
 (ns certainty-derivative.core
   (:require [certainty-derivative.loader.read :refer [read-files]]
             [certainty-derivative.options :as options]
-            [certainty-derivative.viewer.format :as format]
-            [certainty-derivative.viewer.sort :as sort]
+            [certainty-derivative.viewer.render :refer [render]]
             [clojure.string :as string]))
 
-(defn render [records]
-  (doseq [record records]
-    (-> record
-        format/friendly-format
-        println)))
+
+(defn find-records [args]
+  (let [filenames (get (options/parse args) :arguments)]
+    (apply read-files filenames)))
 
 (defn view [& args]
-  (let [command (options/parse args)
-        records (apply read-files (command :arguments))
-        sorted (sort/dispatch-sort command records)]
-    (if-let [errors (get command :errors)]
-      (println (string/join "\n" errors))
+  (if-let [errors (get (options/parse args) :errors)]
+    (println (string/join "\n" errors))
+    (let [records (find-records args)
+          sorted (options/dispatch-sort (options/parse args) records)]
       (render sorted))))

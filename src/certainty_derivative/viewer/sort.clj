@@ -11,13 +11,3 @@
 
 (defn by-date-of-birth [records]
   (sort-by :certainty-derivative.record/date-of-birth records))
-
-(defn dispatch-sort [options records]
-  (let [strategy (get-in options [:options :sort])
-        direction (if (get-in options [:options :reverse])
-                    reverse
-                    identity)]
-    (case strategy
-      "women" (direction (by-gender-and-last-name records))
-      "lname" (direction (by-last-name records))
-      "dob" (direction (by-date-of-birth records)))))
