@@ -57,8 +57,9 @@
 
      You may assume that the delimiters (commas, pipes and spaces) do not appear anywhere in the data values themselves. Write a program in a language of your choice to read in records from these files and combine them into a single set of records.
 
-     Output
-     -------
+    
+****  Output
+     
      Create and display 3 different views of the data you read in:
      - Output 1 :: sorted by gender (females before males) then by last name ascending.
      - Output 2 :: sorted by birth date, ascending.
