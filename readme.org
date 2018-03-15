@@ -1,34 +1,36 @@
 * certainty-derivative
  
-
-  
-
- 
   A sample command-line/REST application for parsing, ordering, sorting, and serving records in several text formats.
 
 ** Usage
 *** From the command line
      With [[https://leiningen.org/][lein]] installed, run 
+     
+     #+BEGIN_SRC sh
+     lein data
+     #+END_SRC
 
-  #+BEGIN_SRC sh
-  lein view ./resources/*.txt
-  #+END_SRC
+     to generate some test data in the ./resources directory. Then run
+
+     #+BEGIN_SRC sh
+     lein view ./resources/*.txt
+     #+END_SRC
   
-  to view a formatted list of pregenerated records, sorted in ascending order by last name. To change the sorting field, use the `-s` flag with one of the options `women`, `dob`, or `lname`. To reverse the order, use the `-r` flag. For example, 
+     to view a formatted list of pregenerated records, sorted in ascending order by last name. To change the sorting field, use the `-s` flag with one of the options `women`, `dob`, or `lname`. To reverse the order, use the `-r` flag. For example, 
 
-  #+BEGIN_SRC sh
-  lein view -s dob -r ./resources/003.txt
-  #+END_SRC
+     #+BEGIN_SRC sh
+     lein view -s dob -r ./resources/003.txt
+     #+END_SRC
 
 *** As a web service
 
-Start the server with `lein serve`. It will begin responding to requests on localhost:3000. It supports the three orderings in the requirements -- here's how I like to get records:
+    Start the server with `lein serve`. It will begin responding to requests on localhost:3000. It supports the three orderings in the requirements below, with these routes:
 
-#+BEGIN_SRC sh
-curl localhost:3000/records/name
-curl localhost:3000/records/birthdate
-curl localhost:3000/records/gender
-#+END_SRC 
+    #+BEGIN_SRC sh
+    curl localhost:3000/records/name
+    curl localhost:3000/records/birthdate
+    curl localhost:3000/records/gender
+    #+END_SRC 
 
 ** Requirements 
 *** Rules and Guidelines
@@ -40,43 +42,43 @@ curl localhost:3000/records/gender
 
 *** Step 1 - Build a system to parse and sort a set of records
    
-  Create a command line app that takes as input a file with a set of records in one of three formats described below, and outputs (to the screen) the set of records sorted in one of three ways.
+    Create a command line app that takes as input a file with a set of records in one of three formats described below, and outputs (to the screen) the set of records sorted in one of three ways.
  
-  Input
-  ------
-  A record consists of the following 5 fields: last name, first name, gender, date of birth and favorite color. The input is 3 files, each containing records stored in a different format. You may generate these files yourself, and you can make certain assumptions if it makes solving your problem easier.
+    Input
+    ------
+    A record consists of the following 5 fields: last name, first name, gender, date of birth and favorite color. The input is 3 files, each containing records stored in a different format. You may generate these files yourself, and you can make certain assumptions if it makes solving your problem easier.
 
-      • The pipe-delimited file lists each record as follows:
-  LastName | FirstName | Gender | FavoriteColor | DateOfBirth
-      • The comma-delimited file looks like this:
-  LastName, FirstName, Gender, FavoriteColor, DateOfBirth
-      • The space-delimited file looks like this:
-  LastName FirstName Gender FavoriteColor DateOfBirth
+    • The pipe-delimited file lists each record as follows:
+    LastName | FirstName | Gender | FavoriteColor | DateOfBirth
+    • The comma-delimited file looks like this:
+    LastName, FirstName, Gender, FavoriteColor, DateOfBirth
+    • The space-delimited file looks like this:
+    LastName FirstName Gender FavoriteColor DateOfBirth
 
-  You may assume that the delimiters (commas, pipes and spaces) do not appear anywhere in the data values themselves. Write a program in a language of your choice to read in records from these files and combine them into a single set of records.
+    You may assume that the delimiters (commas, pipes and spaces) do not appear anywhere in the data values themselves. Write a program in a language of your choice to read in records from these files and combine them into a single set of records.
 
-  Output
-  -------
-  Create and display 3 different views of the data you read in:
-      • Output 1 – sorted by gender (females before males) then by last name ascending.
-      • Output 2 – sorted by birth date, ascending.
-      • Output 3 – sorted by last name, descending.
-  Display dates in the format M/D/YYYY.
+    Output
+    -------
+    Create and display 3 different views of the data you read in:
+    • Output 1 – sorted by gender (females before males) then by last name ascending.
+    • Output 2 – sorted by birth date, ascending.
+    • Output 3 – sorted by last name, descending.
+    Display dates in the format M/D/YYYY.
 
 **** TODO Create the command line interface
 
 **** TODO Create the println output (abstract enough for REST too)
 
 *** Step 2 - Build a REST API to access your system
-  Tests for this section are required as well.
-  Within the same code base, build a standalone REST API with the following endpoints:
-      • POST /records - Post a single data line in any of the 3 formats supported by your existing code
-      • GET /records/gender - returns records sorted by gender
-      • GET /records/birthdate - returns records sorted by birthdate
-      • GET /records/name - returns records sorted by name
+    Tests for this section are required as well.
+    Within the same code base, build a standalone REST API with the following endpoints:
+    • POST /records - Post a single data line in any of the 3 formats supported by your existing code
+    • GET /records/gender - returns records sorted by gender
+    • GET /records/birthdate - returns records sorted by birthdate
+    • GET /records/name - returns records sorted by name
 
-  It's your choice how you render the output from these endpoints as long as it well structured data. These endpoints should return JSON.
-  To keep it simple, don't worry about using a persistent datastore.
+    It's your choice how you render the output from these endpoints as long as it well structured data. These endpoints should return JSON.
+    To keep it simple, don't worry about using a persistent datastore.
 
 *** Step 3 - Review and Refactor
    
