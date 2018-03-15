@@ -13,16 +13,9 @@
                                  "./resources/002.txt"
                                  "./resources/003.txt"))))))
 
-(defn phase-instrument [e phase-name]
-  (ex-info (str "NumberFormatException during " phase-name)
-           {:data (ex-data e)}))
-
 (deftest test-file-parsing
   (generate-test-data 20)
-  (let [data (try
-               (read-files "./resources/001.txt"
-                           "./resources/002.txt"
-                           "./resources/003.txt")
-               (catch NumberFormatException e
-                 (throw (phase-instrument e "READING"))))]
+  (let [data (read-files "./resources/001.txt"
+                         "./resources/002.txt"
+                         "./resources/003.txt")]
     (is (every? #(s/valid? :certainty-derivative.record/row %) data))))

@@ -3,6 +3,7 @@
             [certainty-derivative.viewer.format :as format]
             [clojure.string :as string]))
 
+
 (def example-first-name "Thomas")
 (def example-last-name "Henderson")
 (def example-favorite-color "purple")

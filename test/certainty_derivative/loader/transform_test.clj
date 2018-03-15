@@ -3,6 +3,7 @@
             [certainty-derivative.record.example
              :refer
              [example-comma-row example-pipe-row example-space-row]]
+            [certainty-derivative.record]
             [clojure.spec.alpha :as s]
             [clojure.test :refer [deftest is]]))
 
