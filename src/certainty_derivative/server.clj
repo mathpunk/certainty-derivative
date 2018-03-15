@@ -10,9 +10,6 @@
             [ring.middleware.params :as params]
             [ring.util.response :as res]))
 
-(defn init []
-  (gen/generate-test-data 30))
-
 (def records
   (atom (read/read-files "./resources/001.txt"
                          "./resources/002.txt"

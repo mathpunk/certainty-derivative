@@ -103,9 +103,8 @@
   (let [file (-> filename
                  (io/resource)
                  (io/as-file))]
-    (if (.exists file)
-      (io/delete-file file)
-      nil)))
+    (when (.exists file)
+      (io/delete-file file))))
 
 (defn generate-test-data [n]
   (doseq [file ["001.txt" "002.txt" "003.txt"]]
@@ -116,3 +115,8 @@
     (spit "./resources/002.txt" (str row "\n") :append true))
   (doseq [row (generate-sample-rows n :pipe)]
     (spit "./resources/003.txt" (str row "\n") :append true)))
+
+
+;; Ensure test data exists when running the server
+(defn init []
+  (generate-test-data 30))
